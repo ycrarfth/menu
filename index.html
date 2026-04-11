@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Menu | Premium Dining</title>
+    <style>
+        :root {
+            --bg-color: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --accent-color: #e67e22;
+            --text-color: #ffffff;
+            --whatsapp-green: #25D366;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        h1 { color: var(--accent-color); margin: 0; font-size: 24px; }
+        p { color: #888; font-size: 14px; }
+
+        .category-title {
+            color: var(--accent-color);
+            font-size: 18px;
+            margin: 20px 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .menu-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #222;
+        }
+
+        .item-info h3 { margin: 0; font-size: 16px; font-weight: 500; }
+        .item-info span { color: var(--accent-color); font-weight: bold; }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #222;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 30px;
+        }
+
+        .qty-val { width: 20px; text-align: center; font-weight: bold; }
+
+        .footer-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #111;
+            padding: 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: center;
+        }
+
+        .order-btn {
+            background-color: var(--whatsapp-green);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.2s;
+        }
+
+        .order-btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PREMIUM RESTO</h1>
+        <p>Table No: 01</p>
+    </header>
+
+    <div class="category-title">Arabian Delights</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <h3>Alfaham (Quarter)</h3>
+            <span>₹160</span>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Alfaham', -1)">-</button>
+            <span class="qty-val" id="qty-Alfaham">0</span>
+            <button class="qty-btn" onclick="updateQty('Alfaham', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="menu-item">
+        <div class="item-info">
+            <h3>Chicken Mandi</h3>
+            <span>₹220</span>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Mandi', -1)">-</button>
+            <span class="qty-val" id="qty-Mandi">0</span>
+            <button class="qty-btn" onclick="updateQty('Mandi', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="menu-item">
+        <div class="item-info">
+            <h3>Shavayi Chicken</h3>
+            <span>₹180</span>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Shavayi', -1)">-</button>
+            <span class="qty-val" id="qty-Shavayi">0</span>
+            <button class="qty-btn" onclick="updateQty('Shavayi', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="category-title">Fresh Juices</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <h3>Lime Juice</h3>
+            <span>₹30</span>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Lime', -1)">-</button>
+            <span class="qty-val" id="qty-Lime">0</span>
+            <button class="qty-btn" onclick="updateQty('Lime', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="menu-item">
+        <div class="item-info">
+            <h3>Shamman Shake</h3>
+            <span>₹70</span>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Shamman', -1)">-</button>
+            <span class="qty-val" id="qty-Shamman">0</span>
+            <button class="qty-btn" onclick="updateQty('Shamman', 1)">+</button>
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <button class="order-btn" onclick="sendWhatsAppOrder()">PLACE ORDER ON WHATSAPP</button>
+    </div>
+
+    <script>
+        let orderData = {};
+
+        function updateQty(item, change) {
+            if (!orderData[item]) orderData[item] = 0;
+            orderData[item] += change;
+            
+            if (orderData[item] < 0) orderData[item] = 0;
+            
+            document.getElementById(`qty-${item}`).innerText = orderData[item];
+        }
+
+        function sendWhatsAppOrder() {
+            const phoneNumber = "916238726103";
+            const tableNum = "01";
+            let message = `*NEW ORDER - TABLE ${tableNum}*%0A--------------------------%0A`;
+            let hasItems = false;
+
+            for (const [item, qty] of Object.entries(orderData)) {
+                if (qty > 0) {
+                    message += `• ${item}: ${qty}nos%0A`;
+                    hasItems = true;
+                }
+            }
+
+            if (!hasItems) {
+                alert("Please select at least one item!");
+                return;
+            }
+
+            window.location.href = `https://wa.me/${phoneNumber}?text=${message}`;
+        }
+    </script>
+</body>
+</html>

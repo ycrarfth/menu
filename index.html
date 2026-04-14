@@ -19,7 +19,67 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
-            padding-bottom: 140px; /* Space for total bar */
+            padding-bottom: 140px;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR / DRAWER */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #1a1a1a;
+            overflow-x: hidden;
+            transition: 0.4s;
+            padding-top: 60px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            border-right: 1px solid #333;
+        }
+        .sidenav-content {
+            padding: 25px;
+            text-align: left;
+        }
+        .sidenav h2 {
+            color: var(--accent-color);
+            font-size: 20px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .sidenav p { font-size: 14px; color: #bbb; margin-bottom: 20px; }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 36px;
+            color: #888;
+            text-decoration: none;
+        }
+        .contact-box {
+            background: #222;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .contact-box a {
+            display: block;
+            color: var(--whatsapp-green);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        /* MENU ICON */
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--accent-color);
+            z-index: 10;
         }
 
         header {
@@ -69,10 +129,7 @@
             border: 1px solid #222;
         }
 
-        .item-left {
-            display: flex;
-            align-items: center;
-        }
+        .item-left { display: flex; align-items: center; }
 
         .item-img {
             width: 65px;
@@ -81,7 +138,7 @@
             object-fit: cover;
             margin-right: 15px;
             border: 1px solid #333;
-            background-color: #222; /* Placeholder color */
+            background-color: #222;
         }
 
         .item-info h3 { margin: 0; font-size: 15px; font-weight: 500; }
@@ -148,13 +205,26 @@
             cursor: pointer;
             width: 100%;
             max-width: 400px;
-            transition: 0.3s;
         }
-        
-        .order-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
+
+    <div id="castelynSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <div class="sidenav-content">
+            <h2>CASTELYN</h2>
+            <p>Digital Solutions & Menu Design</p>
+            <div class="contact-box">
+                <span style="font-size: 11px; color: #777;">DEVELOPER CONTACT:</span>
+                <a href="https://wa.me/916238690916">💬 WhatsApp Only: 6238690916</a>
+                <a href="mailto:yasirarafath071@gmail.com" style="color:#e67e22">📧 yasirarafath071@gmail.com</a>
+            </div>
+            <p style="font-size: 10px; margin-top: 40px; color: #444;">Powered by Castelyn Digital</p>
+        </div>
+    </div>
+
+    <div class="menu-toggle" onclick="openNav()">☰</div>
 
     <header>
         <h1 style="color:var(--accent-color); margin:0; letter-spacing: 2px;">PREMIUM RESTO</h1>
@@ -257,15 +327,20 @@
         let orderData = {};
         let totalBill = 0;
 
+        function openNav() {
+            document.getElementById("castelynSidenav").style.width = "280px";
+        }
+
+        function closeNav() {
+            document.getElementById("castelynSidenav").style.width = "0";
+        }
+
         function updateQty(item, price, change) {
             if (!orderData[item]) orderData[item] = { qty: 0, price: price };
-            
             let newQty = orderData[item].qty + change;
             if (newQty < 0) return;
-
             orderData[item].qty = newQty;
             document.getElementById(`qty-${item}`).innerText = newQty;
-
             calculateTotal();
         }
 
@@ -281,16 +356,8 @@
             const phoneNumber = "916238726103";
             const tableNum = "01";
             const customerName = document.getElementById('cust-name').value.trim();
-            
-            if (customerName === "") {
-                alert("Please enter your name!");
-                return;
-            }
-
-            let message = `*NEW ORDER - TABLE ${tableNum}*%0A`;
-            message += `*Customer:* ${customerName}%0A`;
-            message += `--------------------------%0A`;
-            
+            if (customerName === "") { alert("Please enter your name!"); return; }
+            let message = `*NEW ORDER - TABLE ${tableNum}*%0A*Customer:* ${customerName}%0A--------------------------%0A`;
             let hasItems = false;
             for (const [name, data] of Object.entries(orderData)) {
                 if (data.qty > 0) {
@@ -298,15 +365,8 @@
                     hasItems = true;
                 }
             }
-
-            if (!hasItems) {
-                alert("Please select at least one item!");
-                return;
-            }
-
-            message += `--------------------------%0A`;
-            message += `*TOTAL AMOUNT: ₹${totalBill}*`;
-
+            if (!hasItems) { alert("Please select at least one item!"); return; }
+            message += `--------------------------%0A*TOTAL AMOUNT: ₹${totalBill}*`;
             window.location.href = `https://wa.me/${phoneNumber}?text=${message}`;
         }
     </script>

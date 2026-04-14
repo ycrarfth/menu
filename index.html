@@ -19,12 +19,12 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
-            padding-bottom: 120px;
+            padding-bottom: 140px; /* Space for total bar */
         }
 
         header {
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0;
             border-bottom: 1px solid #333;
             margin-bottom: 20px;
         }
@@ -41,71 +41,87 @@
             width: 100%;
             background: #222;
             border: 1px solid #444;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             color: white;
             box-sizing: border-box;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .category-title {
             color: var(--accent-color);
             font-size: 16px;
-            margin: 20px 0 10px;
+            margin: 25px 0 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-left: 3px solid var(--accent-color);
+            border-left: 4px solid var(--accent-color);
             padding-left: 10px;
         }
 
         .menu-item {
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #222;
         }
 
-        .item-info h3 { margin: 0; font-size: 16px; font-weight: 500; }
-        .item-info span { color: var(--accent-color); font-weight: bold; }
+        .item-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .item-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 1px solid #333;
+            background-color: #222; /* Placeholder color */
+        }
+
+        .item-info h3 { margin: 0; font-size: 15px; font-weight: 500; }
+        .item-info span { color: var(--accent-color); font-weight: bold; font-size: 14px; }
 
         .qty-controls {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: #222;
-            padding: 5px 10px;
-            border-radius: 8px;
+            padding: 5px 12px;
+            border-radius: 10px;
+            border: 1px solid #333;
         }
 
         .qty-btn {
             background: none;
             border: none;
             color: var(--accent-color);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
             cursor: pointer;
-            width: 30px;
+            width: 25px;
         }
 
-        .qty-val { width: 20px; text-align: center; font-weight: bold; }
+        .qty-val { width: 20px; text-align: center; font-weight: bold; font-size: 16px; }
 
-        /* Total Amount Bar */
         .total-bar {
             position: fixed;
-            bottom: 85px;
+            bottom: 80px;
             left: 0;
             right: 0;
             background: var(--accent-color);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             text-align: right;
             font-weight: bold;
             font-size: 18px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+            z-index: 99;
         }
 
         .footer-action {
@@ -118,6 +134,7 @@
             border-top: 1px solid #333;
             display: flex;
             justify-content: center;
+            z-index: 100;
         }
 
         .order-btn {
@@ -131,26 +148,33 @@
             cursor: pointer;
             width: 100%;
             max-width: 400px;
+            transition: 0.3s;
         }
+        
+        .order-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 style="color:var(--accent-color); margin:0;">PREMIUM RESTO</h1>
-        <p style="color:#888; font-size:14px;">Table No: 01</p>
+        <h1 style="color:var(--accent-color); margin:0; letter-spacing: 2px;">PREMIUM RESTO</h1>
+        <p style="color:#888; font-size:14px; margin-top: 5px;">Table No: 01</p>
     </header>
 
     <div class="customer-info">
-        <label style="font-size: 12px; color: #888;">YOUR NAME</label>
-        <input type="text" id="cust-name" placeholder="Enter your name here...">
+        <label style="font-size: 12px; color: #888; text-transform: uppercase;">Customer Name</label>
+        <input type="text" id="cust-name" placeholder="Enter your name...">
     </div>
 
     <div class="category-title">Arabian Delights</div>
+
     <div class="menu-item">
-        <div class="item-info">
-            <h3>Alfaham (Quarter)</h3>
-            <span>₹160</span>
+        <div class="item-left">
+            <img src="alfaham.jpg" class="item-img" alt="Alfaham">
+            <div class="item-info">
+                <h3>Alfaham (Qtr)</h3>
+                <span>₹160</span>
+            </div>
         </div>
         <div class="qty-controls">
             <button class="qty-btn" onclick="updateQty('Alfaham', 160, -1)">-</button>
@@ -160,9 +184,12 @@
     </div>
 
     <div class="menu-item">
-        <div class="item-info">
-            <h3>Chicken Mandi</h3>
-            <span>₹220</span>
+        <div class="item-left">
+            <img src="mandi.jpg" class="item-img" alt="Mandi">
+            <div class="item-info">
+                <h3>Chicken Mandi</h3>
+                <span>₹220</span>
+            </div>
         </div>
         <div class="qty-controls">
             <button class="qty-btn" onclick="updateQty('Mandi', 220, -1)">-</button>
@@ -172,9 +199,12 @@
     </div>
 
     <div class="menu-item">
-        <div class="item-info">
-            <h3>Shavayi Chicken</h3>
-            <span>₹180</span>
+        <div class="item-left">
+            <img src="shavayi.jpg" class="item-img" alt="Shavayi">
+            <div class="item-info">
+                <h3>Shavayi Chicken</h3>
+                <span>₹180</span>
+            </div>
         </div>
         <div class="qty-controls">
             <button class="qty-btn" onclick="updateQty('Shavayi', 180, -1)">-</button>
@@ -184,10 +214,14 @@
     </div>
 
     <div class="category-title">Fresh Juices</div>
+
     <div class="menu-item">
-        <div class="item-info">
-            <h3>Lime Juice</h3>
-            <span>₹30</span>
+        <div class="item-left">
+            <img src="lime.jpg" class="item-img" alt="Lime">
+            <div class="item-info">
+                <h3>Lime Juice</h3>
+                <span>₹30</span>
+            </div>
         </div>
         <div class="qty-controls">
             <button class="qty-btn" onclick="updateQty('Lime', 30, -1)">-</button>
@@ -197,9 +231,12 @@
     </div>
 
     <div class="menu-item">
-        <div class="item-info">
-            <h3>Shamman Shake</h3>
-            <span>₹70</span>
+        <div class="item-left">
+            <img src="shamman.jpg" class="item-img" alt="Shamman">
+            <div class="item-info">
+                <h3>Shamman Shake</h3>
+                <span>₹70</span>
+            </div>
         </div>
         <div class="qty-controls">
             <button class="qty-btn" onclick="updateQty('Shamman', 70, -1)">-</button>

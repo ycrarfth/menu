@@ -6,11 +6,12 @@
     <title>Digital Menu | Premium Dining</title>
     <style>
         :root {
-            --bg-color: #0f0f0f;
+            --bg-color: #0c0c0c;
             --card-bg: #1a1a1a;
             --accent-color: #e67e22;
             --text-color: #ffffff;
             --whatsapp-green: #25D366;
+            --glass-bg: rgba(26, 26, 26, 0.95);
         }
 
         body {
@@ -21,303 +22,180 @@
             padding: 20px;
             padding-bottom: 140px;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* SIDEBAR / DRAWER */
-        .sidenav {
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-item {
+            animation: fadeIn 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        /* SIDEBARS */
+        .sidenav, .dev-nav {
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 1000;
+            z-index: 1001;
             top: 0;
-            left: 0;
-            background-color: #1a1a1a;
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(10px);
             overflow-x: hidden;
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 60px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-            border-right: 1px solid #333;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
         }
-        .sidenav-content {
-            padding: 25px;
-            text-align: left;
-        }
-        .sidenav h2 {
-            color: var(--accent-color);
-            font-size: 20px;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-        .sidenav p { font-size: 14px; color: #bbb; margin-bottom: 20px; }
-        .sidenav .closebtn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 36px;
-            color: #888;
-            text-decoration: none;
-        }
-        .contact-box {
-            background: #222;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        .contact-box a {
-            display: block;
-            color: var(--whatsapp-green);
-            text-decoration: none;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
+        .sidenav { left: 0; border-right: 1px solid #333; }
+        .dev-nav { right: 0; border-left: 1px solid #333; }
 
-        /* MENU ICON */
-        .menu-toggle {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--accent-color);
-            z-index: 10;
-        }
+        .sidenav-content { padding: 25px; }
+        .sidenav h2 { color: var(--accent-color); font-size: 18px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .sidenav a.cat-link { padding: 15px 0; text-decoration: none; font-size: 16px; color: #bbb; display: block; border-bottom: 1px solid #222; transition: 0.3s; }
+        .sidenav a.cat-link:hover { color: var(--accent-color); padding-left: 10px; }
 
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #333;
-            margin-bottom: 20px;
-        }
+        .menu-toggle { position: absolute; top: 20px; left: 20px; font-size: 28px; cursor: pointer; color: var(--accent-color); z-index: 10; transition: 0.3s; }
+        .dev-toggle { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; color: #888; z-index: 10; transition: 0.3s; }
+        .menu-toggle:hover, .dev-toggle:hover { transform: scale(1.1); }
 
-        .customer-info {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #333;
-        }
+        .closebtn { position: absolute; top: 10px; right: 20px; font-size: 36px; color: #888; text-decoration: none; }
+        .closebtn-left { position: absolute; top: 10px; left: 20px; font-size: 36px; color: #888; text-decoration: none; }
 
-        .customer-info input {
-            width: 100%;
-            background: #222;
-            border: 1px solid #444;
-            padding: 12px;
-            border-radius: 8px;
-            color: white;
-            box-sizing: border-box;
-            margin-top: 8px;
-        }
+        header { text-align: center; padding: 30px 0; border-bottom: 1px solid #222; margin-bottom: 10px; }
 
-        .category-title {
-            color: var(--accent-color);
-            font-size: 16px;
-            margin: 25px 0 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 10px;
-        }
+        .customer-info { background: var(--card-bg); padding: 15px; border-radius: 12px; margin: 20px 0; border: 1px solid #333; transition: 0.3s; }
+        .customer-info:focus-within { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(230, 126, 34, 0.2); }
+        .customer-info input { width: 100%; background: #222; border: 1px solid #444; padding: 12px; border-radius: 8px; color: white; box-sizing: border-box; outline: none; transition: 0.3s; }
 
-        .menu-item {
-            background: var(--card-bg);
-            padding: 12px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #222;
-        }
-
+        .category-title { color: var(--accent-color); font-size: 16px; margin: 35px 0 15px; text-transform: uppercase; border-left: 4px solid var(--accent-color); padding-left: 10px; letter-spacing: 1px; }
+        
+        .menu-item { background: var(--card-bg); padding: 12px; border-radius: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; transition: 0.3s ease; }
+        .menu-item:hover { transform: scale(1.02); border-color: #444; }
+        
         .item-left { display: flex; align-items: center; }
+        .item-img { width: 75px; height: 75px; border-radius: 14px; object-fit: cover; margin-right: 15px; border: 1px solid #333; }
 
-        .item-img {
-            width: 65px;
-            height: 65px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin-right: 15px;
-            border: 1px solid #333;
-            background-color: #222;
-        }
+        .item-info h3 { margin: 0; font-size: 16px; font-weight: 500; }
+        .item-info span { color: var(--accent-color); font-weight: bold; font-size: 15px; margin-top: 4px; display: block; }
 
-        .item-info h3 { margin: 0; font-size: 15px; font-weight: 500; }
-        .item-info span { color: var(--accent-color); font-weight: bold; font-size: 14px; }
+        .qty-controls { display: flex; align-items: center; gap: 12px; background: #222; padding: 6px 14px; border-radius: 12px; border: 1px solid #333; }
+        .qty-btn { background: none; border: none; color: var(--accent-color); font-size: 22px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .qty-btn:active { transform: scale(1.3); }
+        .qty-val { width: 22px; text-align: center; font-weight: bold; font-size: 16px; }
 
-        .qty-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #222;
-            padding: 5px 12px;
-            border-radius: 10px;
-            border: 1px solid #333;
-        }
+        .total-bar { position: fixed; bottom: 80px; left: 0; right: 0; background: var(--glass-bg); backdrop-filter: blur(10px); color: white; padding: 15px 25px; text-align: right; font-weight: bold; z-index: 99; border-top: 1px solid #333; font-size: 18px; }
+        .footer-action { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-color); padding: 15px 20px; display: flex; justify-content: center; z-index: 100; border-top: 1px solid #222; }
+        .order-btn { background-color: var(--whatsapp-green); color: white; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: bold; width: 100%; max-width: 400px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2); }
+        .order-btn:hover { background-color: #21bd5b; transform: translateY(-2px); }
 
-        .qty-btn {
-            background: none;
-            border: none;
-            color: var(--accent-color);
-            font-size: 22px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 25px;
-        }
-
-        .qty-val { width: 20px; text-align: center; font-weight: bold; font-size: 16px; }
-
-        .total-bar {
-            position: fixed;
-            bottom: 80px;
-            left: 0;
-            right: 0;
-            background: var(--accent-color);
-            color: white;
-            padding: 12px 20px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
-            z-index: 99;
-        }
-
-        .footer-action {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #111;
-            padding: 15px 20px;
-            border-top: 1px solid #333;
-            display: flex;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .order-btn {
-            background-color: var(--whatsapp-green);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            max-width: 400px;
-        }
+        .contact-box { background: #222; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #333; }
+        .contact-box a { display: block; color: var(--whatsapp-green); text-decoration: none; margin-bottom: 15px; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <div id="castelynSidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <div id="catSidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav('catSidenav')">×</a>
         <div class="sidenav-content">
-            <h2>CASTELYN</h2>
-            <p>Digital Solutions & Menu Design</p>
-            <div class="contact-box">
-                <span style="font-size: 11px; color: #777;">DEVELOPER CONTACT:</span>
-                <a href="https://wa.me/916238690916">💬 WhatsApp Only: 6238690916</a>
-                <a href="mailto:yasirarafath071@gmail.com" style="color:#e67e22">📧 yasirarafath071@gmail.com</a>
-            </div>
-            <p style="font-size: 10px; margin-top: 40px; color: #444;">Powered by Castelyn Digital</p>
+            <h2>Categories</h2>
+            <a href="#arabian" class="cat-link" onclick="closeNav('catSidenav')">Arabian Delights</a>
+            <a href="#juices" class="cat-link" onclick="closeNav('catSidenav')">Fresh Juices</a>
         </div>
     </div>
 
-    <div class="menu-toggle" onclick="openNav()">☰</div>
+    <div id="devNav" class="dev-nav">
+        <a href="javascript:void(0)" class="closebtn-left" onclick="closeNav('devNav')">×</a>
+        <div style="padding: 25px;">
+            <h2 style="color: var(--accent-color); letter-spacing: 1px;">CASTELYN</h2>
+            <div class="contact-box">
+                <p style="margin-top:0;"><strong>Yasir Arafath</strong></p>
+                <a href="https://wa.me/916238690916">💬 WhatsApp</a>
+                <a href="mailto:yasirarafath071@gmail.com" style="color:#e67e22">📧 Email Support</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-toggle" onclick="openNav('catSidenav')">☰</div>
+    <div class="dev-toggle" onclick="openNav('devNav')">👤</div>
 
     <header>
         <h1 style="color:var(--accent-color); margin:0; letter-spacing: 2px;">PREMIUM RESTO</h1>
         <p style="color:#888; font-size:14px; margin-top: 5px;">Table No: 01</p>
     </header>
 
-    <div class="customer-info">
-        <label style="font-size: 12px; color: #888; text-transform: uppercase;">Customer Name</label>
-        <input type="text" id="cust-name" placeholder="Enter your name...">
+    <div class="customer-info animate-item" style="animation-delay: 0.1s;">
+        <input type="text" id="cust-name" placeholder="Enter Customer Name">
     </div>
 
-    <div class="category-title">Arabian Delights</div>
-
-    <div class="menu-item">
+    <div id="arabian" class="category-title animate-item" style="animation-delay: 0.2s;">Arabian Delights</div>
+    
+    <div class="menu-item animate-item" style="animation-delay: 0.3s;">
         <div class="item-left">
             <img src="alfaham.jpg" class="item-img" alt="Alfaham">
-            <div class="item-info">
-                <h3>Alfaham (Qtr)</h3>
-                <span>₹160</span>
-            </div>
+            <div class="item-info"><h3>Alfaham</h3><span>₹120</span></div>
         </div>
         <div class="qty-controls">
-            <button class="qty-btn" onclick="updateQty('Alfaham', 160, -1)">-</button>
+            <button class="qty-btn" onclick="updateQty('Alfaham', 120, -1)">-</button>
             <span class="qty-val" id="qty-Alfaham">0</span>
-            <button class="qty-btn" onclick="updateQty('Alfaham', 160, 1)">+</button>
+            <button class="qty-btn" onclick="updateQty('Alfaham', 120, 1)">+</button>
         </div>
     </div>
 
-    <div class="menu-item">
-        <div class="item-left">
-            <img src="mandi.jpg" class="item-img" alt="Mandi">
-            <div class="item-info">
-                <h3>Chicken Mandi</h3>
-                <span>₹220</span>
-            </div>
-        </div>
-        <div class="qty-controls">
-            <button class="qty-btn" onclick="updateQty('Mandi', 220, -1)">-</button>
-            <span class="qty-val" id="qty-Mandi">0</span>
-            <button class="qty-btn" onclick="updateQty('Mandi', 220, 1)">+</button>
-        </div>
-    </div>
-
-    <div class="menu-item">
+    <div class="menu-item animate-item" style="animation-delay: 0.4s;">
         <div class="item-left">
             <img src="shavayi.jpg" class="item-img" alt="Shavayi">
-            <div class="item-info">
-                <h3>Shavayi Chicken</h3>
-                <span>₹180</span>
-            </div>
+            <div class="item-info"><h3>Shavayi</h3><span>₹400</span></div>
         </div>
         <div class="qty-controls">
-            <button class="qty-btn" onclick="updateQty('Shavayi', 180, -1)">-</button>
+            <button class="qty-btn" onclick="updateQty('Shavayi', 400, -1)">-</button>
             <span class="qty-val" id="qty-Shavayi">0</span>
-            <button class="qty-btn" onclick="updateQty('Shavayi', 180, 1)">+</button>
+            <button class="qty-btn" onclick="updateQty('Shavayi', 400, 1)">+</button>
         </div>
     </div>
 
-    <div class="category-title">Fresh Juices</div>
+    <div class="menu-item animate-item" style="animation-delay: 0.5s;">
+        <div class="item-left">
+            <img src="mandi.jpg" class="item-img" alt="Mandi">
+            <div class="item-info"><h3>Chicken Mandi</h3><span>₹170</span></div>
+        </div>
+        <div class="qty-controls">
+            <button class="qty-btn" onclick="updateQty('Mandi', 170, -1)">-</button>
+            <span class="qty-val" id="qty-Mandi">0</span>
+            <button class="qty-btn" onclick="updateQty('Mandi', 170, 1)">+</button>
+        </div>
+    </div>
 
-    <div class="menu-item">
+    <div id="juices" class="category-title animate-item" style="animation-delay: 0.6s;">Fresh Juices</div>
+
+    <div class="menu-item animate-item" style="animation-delay: 0.7s;">
         <div class="item-left">
             <img src="lime.jpg" class="item-img" alt="Lime">
-            <div class="item-info">
-                <h3>Lime Juice</h3>
-                <span>₹30</span>
-            </div>
+            <div class="item-info"><h3>Fresh Lime</h3><span>₹20</span></div>
         </div>
         <div class="qty-controls">
-            <button class="qty-btn" onclick="updateQty('Lime', 30, -1)">-</button>
+            <button class="qty-btn" onclick="updateQty('Lime', 20, -1)">-</button>
             <span class="qty-val" id="qty-Lime">0</span>
-            <button class="qty-btn" onclick="updateQty('Lime', 30, 1)">+</button>
+            <button class="qty-btn" onclick="updateQty('Lime', 20, 1)">+</button>
         </div>
     </div>
 
-    <div class="menu-item">
+    <div class="menu-item animate-item" style="animation-delay: 0.8s;">
         <div class="item-left">
-            <img src="shamman.jpg" class="item-img" alt="Shamman">
-            <div class="item-info">
-                <h3>Shamman Shake</h3>
-                <span>₹70</span>
-            </div>
+            <img src="shamman.jpg" class="item-img" alt="Shamam">
+            <div class="item-info"><h3>Shamam Juice</h3><span>₹70</span></div>
         </div>
         <div class="qty-controls">
-            <button class="qty-btn" onclick="updateQty('Shamman', 70, -1)">-</button>
-            <span class="qty-val" id="qty-Shamman">0</span>
-            <button class="qty-btn" onclick="updateQty('Shamman', 70, 1)">+</button>
+            <button class="qty-btn" onclick="updateQty('Shamam', 70, -1)">-</button>
+            <span class="qty-val" id="qty-Shamam">0</span>
+            <button class="qty-btn" onclick="updateQty('Shamam', 70, 1)">+</button>
         </div>
     </div>
 
-    <div class="total-bar">
-        Total: ₹<span id="grand-total">0</span>
-    </div>
+    <div class="total-bar">Total: ₹<span id="grand-total">0</span></div>
 
     <div class="footer-action">
         <button class="order-btn" onclick="sendWhatsAppOrder()">PLACE ORDER ON WHATSAPP</button>
@@ -327,13 +205,8 @@
         let orderData = {};
         let totalBill = 0;
 
-        function openNav() {
-            document.getElementById("castelynSidenav").style.width = "280px";
-        }
-
-        function closeNav() {
-            document.getElementById("castelynSidenav").style.width = "0";
-        }
+        function openNav(id) { document.getElementById(id).style.width = "280px"; }
+        function closeNav(id) { document.getElementById(id).style.width = "0"; }
 
         function updateQty(item, price, change) {
             if (!orderData[item]) orderData[item] = { qty: 0, price: price };
@@ -346,27 +219,21 @@
 
         function calculateTotal() {
             totalBill = 0;
-            for (const item in orderData) {
-                totalBill += orderData[item].qty * orderData[item].price;
-            }
+            for (const item in orderData) { totalBill += orderData[item].qty * orderData[item].price; }
             document.getElementById('grand-total').innerText = totalBill;
         }
 
         function sendWhatsAppOrder() {
             const phoneNumber = "916238726103";
-            const tableNum = "01";
             const customerName = document.getElementById('cust-name').value.trim();
-            if (customerName === "") { alert("Please enter your name!"); return; }
-            let message = `*NEW ORDER - TABLE ${tableNum}*%0A*Customer:* ${customerName}%0A--------------------------%0A`;
+            if (customerName === "") { alert("Please enter name!"); return; }
+            let message = `*NEW ORDER - TABLE 01*%0A*Customer:* ${customerName}%0A`;
             let hasItems = false;
             for (const [name, data] of Object.entries(orderData)) {
-                if (data.qty > 0) {
-                    message += `• ${name}: ${data.qty} x ₹${data.price}%0A`;
-                    hasItems = true;
-                }
+                if (data.qty > 0) { message += `• ${name}: ${data.qty} x ₹${data.price}%0A`; hasItems = true; }
             }
-            if (!hasItems) { alert("Please select at least one item!"); return; }
-            message += `--------------------------%0A*TOTAL AMOUNT: ₹${totalBill}*`;
+            if (!hasItems) { alert("Select items!"); return; }
+            message += `--------------------------%0A*TOTAL: ₹${totalBill}*`;
             window.location.href = `https://wa.me/${phoneNumber}?text=${message}`;
         }
     </script>
